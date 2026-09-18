@@ -1,15 +1,19 @@
-# Python bytecode & virtualenvs
+# Python bytecode & cache
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Environment
 .venv/
 env/
 venv/
+ENV/
 
-# Database & artifacts
-*.db
-models/*.pkl
+# IDE / VS Code
+.vscode/*
+!.vscode/launch.json
+.idea/
 
-# OS files
+# OS generated
 .DS_Store
 Thumbs.db

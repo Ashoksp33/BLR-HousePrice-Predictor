@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price Prediction System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="text-center mb-0">Stock Price Prediction</h1>
+                    </div>
+                    <div class="card-body">
+                        <form id="prediction-form" action="/predict" method="post">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="symbol" class="form-label">Stock Symbol</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="symbol" name="symbol" placeholder="e.g. AAPL" required>
+                                        <button class="btn btn-outline-secondary" type="button" id="info-btn">Get Info</button>
+                                    </div>
+                                    <div class="form-text">Enter stock ticker symbol (e.g. AAPL, MSFT, GOOGL, NVDA)</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="stock-info" class="d-none mt-2 p-2 border rounded bg-light">
+                                        <h6 class="stock-name mb-1"></h6>
+                                        <div class="stock-details small"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="start_date" class="form-label">Start Date</label>
+                                    <input type="date" class="form-control" id="start_date" name="start_date" required>
+                                    <div class="form-text">Historical data start date</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="end_date" class="form-label">End Date</label>
+                                    <input type="date" class="form-control" id="end_date" name="end_date" required>
+                                    <div class="form-text">Historical data end date</div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label for="predict_days" class="form-label">Prediction Days</label>
+                                    <input type="number" class="form-control" id="predict_days" name="predict_days" value="7" min="1" max="30" required>
+                                    <div class="form-text">Number of days to predict (1-30)</div>
+                                </div>
+                                <div class="col-md-6 d-flex align-items-end">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="business_days_only" name="business_days_only" checked>
+                                        <label class="form-check-label" for="business_days_only">
+                                            Business days only
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg" id="predict-btn">
+                                    <span id="btn-text">Predict Stock Prices</span>
+                                    <span id="spinner" class="spinner-border spinner-border-sm d-none ms-2" role="status" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card mt-4 shadow">
+                    <div class="card-header bg-dark text-white">
+                        <h3 class="mb-0">About This System</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>This application uses Long Short-Term Memory (LSTM) Deep Learning Neural Networks to forecast stock prices based on historical financial time series data.</p>
+                        
+                        <h5>Key Features:</h5>
+                        <ul>
+                            <li>Real-time financial data fetching via Yahoo Finance API</li>
+                            <li>Deep Learning LSTM architecture with Dropout & Early Stopping</li>
+                            <li>Comprehensive metrics: RMSE, MAE, MAPE, R-squared, and Directional Accuracy</li>
+                            <li>High-resolution visualization of past prices and future forecasts</li>
+                            <li>Multi-day business forecasting up to 30 days ahead</li>
+                        </ul>
+                        
+                        <div class="alert alert-warning mb-0">
+                            <strong>Disclaimer:</strong> This tool is created for educational and research purposes. Stock market predictions carry inherent risk and should not be used as financial advice.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
