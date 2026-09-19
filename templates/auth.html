@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bengaluru House Price Prediction - Auth Portal</title>
+    <title>Bengaluru House Price System - Login</title>
     <!-- FontAwesome for Social Buttons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Inter Font -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
 </head>
 <body>
@@ -16,24 +14,24 @@
         <p>AI-Powered Real Estate Analytics & Infrastructure Explorer</p>
     </div>
 
-    <!-- Sliding Card (Matching FrontendJoe React Logins Part 04 Specs) -->
+    <!-- Exact 1:1 Implementation of FrontendJoe React Logins Part 04 -->
     <div class="card">
-        <!-- Sliding background overlay panel -->
+        <!-- CardBackground Component -->
         <div class="card-bg login"></div>
 
-        <!-- HERO PANEL: REGISTER SIDE -->
+        <!-- HeroPanel (type="register") -->
         <div class="hero register">
             <h2>Welcome back</h2>
-            <p>Login to review property predictions & dealer contacts</p>
+            <p>Login to review property predictions & insights</p>
             <button type="button" data-toggle="true">LOGIN</button>
         </div>
 
-        <!-- FORM PANEL: REGISTER SIDE -->
+        <!-- RegisterForm Component -->
         <div class="form register">
             <h2>Sign Up</h2>
             <div class="sso">
                 <a class="fa-brands fa-facebook-f" title="Facebook SSO"></a>
-                <a class="fa-brands fa-google" title="Google SSO"></a>
+                <a class="fa-brands fa-twitter" title="Twitter SSO"></a>
                 <a class="fa-brands fa-linkedin-in" title="LinkedIn SSO"></a>
             </div>
             <p>Or use your email address</p>
@@ -45,26 +43,26 @@
             </form>
         </div>
 
-        <!-- HERO PANEL: LOGIN SIDE -->
+        <!-- HeroPanel (type="login") -->
         <div class="hero login active">
             <h2>Hello there</h2>
             <p>Begin your journey to smart Bengaluru home valuation</p>
             <button type="button" data-toggle="true">SIGN UP</button>
         </div>
 
-        <!-- FORM PANEL: LOGIN SIDE -->
+        <!-- LoginForm Component -->
         <div class="form login active">
             <h2>Login</h2>
             <div class="sso">
                 <a class="fa-brands fa-facebook-f" title="Facebook SSO"></a>
-                <a class="fa-brands fa-google" title="Google SSO"></a>
+                <a class="fa-brands fa-twitter" title="Twitter SSO"></a>
                 <a class="fa-brands fa-linkedin-in" title="LinkedIn SSO"></a>
             </div>
             <p>Or use your email address</p>
             <form autocomplete="off">
                 <input type="email" placeholder="Email" value="demo@bengaluru.com" required>
                 <input type="password" placeholder="Password" value="password123" required>
-                <a style="padding-top: 4px; margin-bottom: 4px;" href="javascript:void(0)">Forgot password?</a>
+                <a style="padding-top: 6px; margin-bottom: 7px;" href="javascript:void(0)">Forgot password?</a>
                 <button type="submit">LOGIN</button>
             </form>
         </div>

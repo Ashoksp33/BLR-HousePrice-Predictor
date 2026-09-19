@@ -1,9 +1,9 @@
-/* Login.css - Smooth Dual Panel Contrast Swap Theme */
+/* Login.css - Exact 1:1 Implementation of FrontendJoe React Logins Part 04 */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 body {
@@ -12,11 +12,11 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #f1f5f9;
+  background: #0f172a;
   background-image: 
-    radial-gradient(at 0% 0%, #e2e8f0 0px, transparent 50%),
-    radial-gradient(at 100% 100%, #cbd5e1 0px, transparent 50%);
-  color: #1e293b;
+    radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.6) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(88, 28, 135, 0.6) 0px, transparent 50%);
+  color: #f9f9f9;
   padding: 20px;
 }
 
@@ -28,30 +28,30 @@ body {
 .auth-header h1 {
   font-size: 32px;
   font-weight: 800;
-  color: #0f172a;
+  background: linear-gradient(135deg, #60a5fa, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin-bottom: 6px;
-  letter-spacing: -0.5px;
 }
 
 .auth-header p {
-  color: #64748b;
+  color: #94a3b8;
   font-size: 15px;
-  font-weight: 500;
 }
 
-/* Card Container */
+/* .card from FrontendJoe Login.css */
 .card {
   position: relative;
   overflow: hidden;
-  width: 680px;
-  height: 460px;
+  width: 660px;
+  height: 440px;
   border-radius: 24px;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15);
+  border: 8px solid #ffffff;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-/* Sliding Hero Overlay - Dark Slate Panel */
+/* .card-bg from FrontendJoe Login.css */
 .card-bg {
   position: absolute;
   z-index: 2;
@@ -59,18 +59,18 @@ body {
   left: 0;
   bottom: 0;
   width: 50%;
-  background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+  background: linear-gradient(135deg, #2563eb, #7c3aed, #db2777);
   background-size: cover;
   border-radius: 18px;
   translate: 0 0;
   transition: 0.65s ease-in-out;
-  box-shadow: inset 0 0 80px rgba(0,0,0,0.25);
 }
 
 .card-bg.login {
   translate: 100% 0;
 }
 
+/* .hero, .form from FrontendJoe Login.css */
 .hero, .form {
   position: absolute;
   width: 50%;
@@ -83,24 +83,6 @@ body {
 .hero.active, .form.active {
   opacity: 1;
   visibility: visible;
-}
-
-.hero.register {
-  left: 0;
-  translate: -100% 0;
-}
-
-.hero.register.active {
-  translate: 0;
-}
-
-.hero.login {
-  left: 50%;
-  translate: 100% 0;
-}
-
-.hero.login.active {
-  translate: 0;
 }
 
 .form.register {
@@ -121,6 +103,25 @@ body {
   translate: 0;
 }
 
+.hero.login {
+  left: 50%;
+  translate: 100% 0;
+}
+
+.hero.login.active {
+  translate: 0;
+}
+
+.hero.register {
+  left: 0;
+  translate: -100% 0;
+}
+
+.hero.register.active {
+  translate: 0;
+}
+
+/* .hero from FrontendJoe Login.css */
 .hero {
   z-index: 3;
   display: flex;
@@ -129,7 +130,7 @@ body {
   justify-content: center;
   gap: 16px;
   width: 50%;
-  color: #ffffff;
+  color: #f9f9f9;
   text-align: center;
   padding: 0 24px;
 }
@@ -138,14 +139,15 @@ body {
   font-size: 28px;
   font-weight: 700;
   color: #ffffff;
+  margin: 0;
 }
 
 .hero p {
   margin: 0 0 6px;
-  opacity: 0.9;
+  opacity: 0.85;
   line-height: 1.45;
   font-size: 14px;
-  color: #e2e8f0;
+  color: #f9f9f9;
 }
 
 .hero button {
@@ -153,22 +155,22 @@ body {
   border-radius: 32px;
   letter-spacing: 1px;
   font-family: inherit;
-  color: #ffffff;
-  border: 1.5px solid #ffffff;
+  color: inherit;
+  border: 1px solid #f9f9f9;
   background: transparent;
   transition: 0.3s;
   cursor: pointer;
-  font-weight: 600;
   font-size: 13px;
+  font-weight: 600;
   text-transform: uppercase;
 }
 
 .hero button:hover {
-  color: #0f172a;
-  background: #ffffff;
-  transform: scale(1.03);
+  color: #212625;
+  background: #f9f9f9;
 }
 
+/* .form from FrontendJoe Login.css */
 .form {
   background: #ffffff;
   z-index: 1;
@@ -184,25 +186,26 @@ body {
 .form h2 {
   font-size: 26px;
   font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 2px;
+  color: #212625;
+  margin: 0;
 }
 
 .form p {
   font-size: 13px;
   color: #64748b;
-  margin-bottom: 6px;
+  margin: 0;
 }
 
+/* SocialButtons / SSO */
 .sso {
   display: flex;
   gap: 12px;
-  margin-bottom: 4px;
+  margin: 4px 0;
 }
 
 .sso a {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: 1px solid #cbd5e1;
   display: flex;
@@ -216,10 +219,9 @@ body {
 }
 
 .sso a:hover {
-  background: #f1f5f9;
-  border-color: #0f172a;
-  color: #0f172a;
-  transform: translateY(-2px);
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
 }
 
 .form form {
@@ -243,9 +245,9 @@ body {
 }
 
 .form form input:focus {
-  border-color: #334155;
+  border-color: #2563eb;
   background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.15);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 .form form a {
@@ -257,7 +259,7 @@ body {
 }
 
 .form form a:hover {
-  color: #0f172a;
+  color: #2563eb;
 }
 
 .form form button {
@@ -265,48 +267,45 @@ body {
   padding: 12px;
   border-radius: 8px;
   border: none;
-  background: #0f172a;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: #ffffff;
   font-weight: 600;
   font-size: 14px;
   letter-spacing: 0.5px;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
 .form form button:hover {
-  background: #334155;
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25);
 }
 
 .demo-credentials {
   margin-top: 20px;
   padding: 10px 16px;
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   font-size: 13px;
-  color: #475569;
+  color: #94a3b8;
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .demo-credentials span {
-  color: #0f172a;
+  color: #38bdf8;
   font-weight: 600;
 }
 
 .demo-credentials code {
-  background: #f1f5f9;
+  background: #0f172a;
   padding: 3px 8px;
   border-radius: 6px;
-  color: #0f172a;
+  color: #f1f5f9;
   font-family: monospace;
-  border: 1px solid #e2e8f0;
 }
 
 .toast {
@@ -315,11 +314,11 @@ body {
   right: 20px;
   padding: 12px 20px;
   border-radius: 10px;
-  background: #0f172a;
+  background: #1e293b;
   color: #fff;
   font-size: 14px;
   font-weight: 500;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
   display: none;
   z-index: 1000;
   transition: all 0.3s ease;
