@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bengaluru House Price Prediction - Auth Portal</title>
+    <!-- FontAwesome for Social Buttons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Inter Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+<body>
+    <div class="auth-header">
+        <h1>Bengaluru House Price System</h1>
+        <p>AI-Powered Real Estate Analytics & Infrastructure Explorer</p>
+    </div>
+
+    <!-- Sliding Card (Matching FrontendJoe React Logins Part 04 Specs) -->
+    <div class="card">
+        <!-- Sliding background overlay panel -->
+        <div class="card-bg login"></div>
+
+        <!-- HERO PANEL: REGISTER SIDE -->
+        <div class="hero register">
+            <h2>Welcome back</h2>
+            <p>Login to review property predictions & dealer contacts</p>
+            <button type="button" data-toggle="true">LOGIN</button>
+        </div>
+
+        <!-- FORM PANEL: REGISTER SIDE -->
+        <div class="form register">
+            <h2>Sign Up</h2>
+            <div class="sso">
+                <a class="fa-brands fa-facebook-f" title="Facebook SSO"></a>
+                <a class="fa-brands fa-google" title="Google SSO"></a>
+                <a class="fa-brands fa-linkedin-in" title="LinkedIn SSO"></a>
+            </div>
+            <p>Or use your email address</p>
+            <form autocomplete="off">
+                <input type="text" placeholder="Full name" required>
+                <input type="email" placeholder="Email address" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">SIGN UP</button>
+            </form>
+        </div>
+
+        <!-- HERO PANEL: LOGIN SIDE -->
+        <div class="hero login active">
+            <h2>Hello there</h2>
+            <p>Begin your journey to smart Bengaluru home valuation</p>
+            <button type="button" data-toggle="true">SIGN UP</button>
+        </div>
+
+        <!-- FORM PANEL: LOGIN SIDE -->
+        <div class="form login active">
+            <h2>Login</h2>
+            <div class="sso">
+                <a class="fa-brands fa-facebook-f" title="Facebook SSO"></a>
+                <a class="fa-brands fa-google" title="Google SSO"></a>
+                <a class="fa-brands fa-linkedin-in" title="LinkedIn SSO"></a>
+            </div>
+            <p>Or use your email address</p>
+            <form autocomplete="off">
+                <input type="email" placeholder="Email" value="demo@bengaluru.com" required>
+                <input type="password" placeholder="Password" value="password123" required>
+                <a style="padding-top: 4px; margin-bottom: 4px;" href="javascript:void(0)">Forgot password?</a>
+                <button type="submit">LOGIN</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Quick Demo Credentials Display -->
+    <div class="demo-credentials">
+        <span><i class="fa-solid fa-key"></i> Quick Demo Login:</span>
+        Email: <code>demo@bengaluru.com</code> | Password: <code>password123</code>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+</html>

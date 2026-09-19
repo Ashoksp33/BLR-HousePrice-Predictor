@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bengaluru Real Estate AI - Dashboard</title>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Inter Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+
+    <div class="app-layout">
+        
+        <!-- LEFT SIDEBAR (Collapsible Pop & Expand Sidebar) -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-header-left">
+                    <i class="fa-solid fa-shapes"></i>
+                    <h2>DASHBOARD</h2>
+                </div>
+                <!-- Toggle Collapse Button -->
+                <button type="button" id="btnToggleSidebar" class="btn-toggle-sidebar" title="Pop & Expand Sidebar">
+                    <i class="fa-solid fa-bars-staggered"></i>
+                </button>
+            </div>
+
+            <!-- User Profile Summary (CLICKABLE TO GO DIRECTLY TO SETTINGS) -->
+            <div class="sidebar-user" id="sidebarUserCard" title="Click to view Settings & Profile">
+                <img src="{{ user.avatar if user.avatar else 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80' }}" alt="Avatar" class="user-avatar" />
+                <div class="user-info">
+                    <h4 id="sidebarUserName">{{ user.name }}</h4>
+                    <p id="sidebarUserRole">{{ user.role if user.role else 'UI/UX Designer & Real Estate Investor' }}</p>
+                </div>
+            </div>
+
+            <!-- Expanded Navigation Menu -->
+            <ul class="nav-menu">
+                <li class="nav-item active" data-view="dashboard">
+                    <a href="javascript:void(0)"><i class="fa-solid fa-table-cells-large"></i> <span>Dashboard</span></a>
+                </li>
+                <li class="nav-item" data-view="catalog">
+                    <a href="javascript:void(0)"><i class="fa-solid fa-building-user"></i> <span>Properties Catalog</span></a>
+                </li>
+                <li class="nav-item" data-view="zones">
+                    <a href="javascript:void(0)"><i class="fa-solid fa-map"></i> <span>Bengaluru Zones</span></a>
+                </li>
+                <li class="nav-item" data-view="valuations">
+                    <a href="javascript:void(0)"><i class="fa-solid fa-bookmark"></i> <span>Saved Valuations</span></a>
+                </li>
+                <li class="nav-item" data-view="insights">
+                    <a href="javascript:void(0)"><i class="fa-solid fa-chart-line"></i> <span>Market Insights</span></a>
+                </li>
+                <li class="nav-item" data-view="locations">
+                    <a href="javascript:void(0)"><i class="fa-solid fa-location-dot"></i> <span>Locations & Infra</span></a>
+                </li>
+                <li class="nav-item" data-view="settings">
+                    <a href="javascript:void(0)"><i class="fa-solid fa-gear"></i> <span>Settings & Profile</span></a>
+                </li>
+                <li class="nav-item">
+                    <a href="/api/auth/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Logout</span></a>
+                </li>
+            </ul>
+
+            <!-- Dark Mode Toggle Switch at Bottom -->
+            <div class="sidebar-footer">
+                <div class="theme-toggle-wrapper">
+                    <div class="theme-toggle-label">
+                        <i class="fa-solid fa-moon"></i> <span>Dark Mode</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="themeSwitch">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="main-content">
+
+            <!-- VIEW 1: MAIN DASHBOARD -->
+            <section id="view-dashboard" class="view-panel active">
+                
+                <div class="dashboard-grid">
+                    
+                    <!-- LEFT COLUMN: INPUT PARAMETERS -->
+                    <div class="glass-card">
+                        <div class="card-title">
+                            <div class="card-title-left"><i class="fa-solid fa-sliders"></i> Property Parameters</div>
+                        </div>
+                        <form id="predictForm">
+                            <!-- Location Selector -->
+                            <div class="form-group">
+                                <label for="location"><i class="fa-solid fa-location-dot"></i> Select Bengaluru Location</label>
+                                <select id="location" class="form-control" required>
+                                    {% for loc in locations %}
+                                        <option value="{{ loc }}" {% if loc.lower() == 'whitefield' %}selected{% endif %}>{{ loc }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Sqft Input -->
+                            <div class="form-group">
+                                <label for="sqft"><i class="fa-solid fa-ruler-combined"></i> Total Area (Square Feet)</label>
+                                <input type="number" id="sqft" class="form-control" value="1400" min="200" max="50000" step="10" required>
+                            </div>
+
+                            <!-- BHK & Bathrooms -->
+                            <div class="grid-2col">
+                                <div class="form-group">
+                                    <label for="bhk"><i class="fa-solid fa-bed"></i> Bedrooms (BHK)</label>
+                                    <select id="bhk" class="form-control" required>
+                                        <option value="1">1 BHK</option>
+                                        <option value="2">2 BHK</option>
+                                        <option value="3" selected>3 BHK</option>
+                                        <option value="4">4 BHK</option>
+                                        <option value="5">5+ BHK</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bath"><i class="fa-solid fa-bath"></i> Bathrooms</label>
+                                    <select id="bath" class="form-control" required>
+                                        <option value="1">1 Bath</option>
+                                        <option value="2" selected>2 Baths</option>
+                                        <option value="3">3 Baths</option>
+                                        <option value="4">4 Baths</option>
+                                        <option value="5">5+ Baths</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Balconies & Area Type -->
+                            <div class="grid-2col">
+                                <div class="form-group">
+                                    <label for="balcony"><i class="fa-solid fa-door-open"></i> Balconies</label>
+                                    <select id="balcony" class="form-control">
+                                        <option value="0">0 Balcony</option>
+                                        <option value="1">1 Balcony</option>
+                                        <option value="2" selected>2 Balconies</option>
+                                        <option value="3">3 Balconies</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="area_type"><i class="fa-solid fa-chart-area"></i> Area Type</label>
+                                    <select id="area_type" class="form-control">
+                                        <option value="Super Built-up Area" selected>Super Built-up</option>
+                                        <option value="Built-up Area">Built-up Area</option>
+                                        <option value="Plot Area">Plot Area</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Availability Status -->
+                            <div class="form-group">
+                                <label for="ready_status"><i class="fa-solid fa-key"></i> Availability Status</label>
+                                <select id="ready_status" class="form-control">
+                                    <option value="Ready to Move" selected>Ready to Move</option>
+                                    <option value="Under Construction">Under Construction</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" id="btnPredict" class="btn-predict">
+                                <i class="fa-solid fa-calculator"></i> Predict House Price
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- RIGHT COLUMN: PREDICTION RESULTS WITH DUAL CURRENCY (₹ INR & $ USD) -->
+                    <div class="glass-card">
+                        <div class="card-title">
+                            <div class="card-title-left"><i class="fa-solid fa-chart-line"></i> ML Price Valuation & Analysis</div>
+                            <button type="button" id="btnSaveValuation" class="btn-secondary">
+                                <i class="fa-solid fa-bookmark"></i> Save Prediction
+                            </button>
+                        </div>
+
+                        <div class="result-hero">
+                            <div class="result-location-badge" id="resLocation">Whitefield</div>
+                            <!-- Dual Currency Displays -->
+                            <div class="price-display-inr" id="resPriceInr">₹ 85.50 Lakhs</div>
+                            <div class="price-display-usd" id="resPriceUsd">$ 103,000 USD (Est. Valuation)</div>
+                            <div class="price-sub" id="resRupees">INR Total: ₹ 85,50,000</div>
+                            <div class="price-sub" style="margin-top:6px; font-weight:600;" id="resRange">Range: ₹ 78.6 Lakhs - ₹ 92.3 Lakhs  •  $94,760 - $111,200 USD</div>
+                        </div>
+
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <i class="fa-solid fa-tag"></i>
+                                <div class="val" id="resPriceSqft">₹ 6,107.14<br><small style="font-size:11px; opacity:0.8">($73.58 USD / sqft)</small></div>
+                                <div class="lbl">Price / Sq.Ft</div>
+                            </div>
+                            <div class="metric-card">
+                                <i class="fa-solid fa-piggy-bank"></i>
+                                <div class="val" id="resEmi">₹ 59,360<br><small style="font-size:11px; opacity:0.8">($715 USD / mo)</small></div>
+                                <div class="lbl">20-Yr EMI (8.5%)</div>
+                            </div>
+                            <div class="metric-card">
+                                <i class="fa-solid fa-shield-halved"></i>
+                                <div class="val" style="color:#10b981">94.8%</div>
+                                <div class="lbl">Model Accuracy</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- PUBLIC PLACES & INFRASTRUCTURE EXPLORER -->
+                <div class="glass-card">
+                    <div class="card-title">
+                        <div class="card-title-left"><i class="fa-solid fa-map-location-dot"></i> Public Places & Infrastructure Explorer</div>
+                    </div>
+
+                    <div class="tab-navigation">
+                        <button class="tab-btn active" data-tab="hospitals"><i class="fa-solid fa-hospital-user"></i> Nearer Hospitals</button>
+                        <button class="tab-btn" data-tab="metro"><i class="fa-solid fa-train-subway"></i> Nearer Metro Stations</button>
+                        <button class="tab-btn" data-tab="bus"><i class="fa-solid fa-bus"></i> Nearer Bus Stops</button>
+                        <button class="tab-btn" data-tab="airport"><i class="fa-solid fa-plane-departure"></i> Airport (BLR)</button>
+                        <button class="tab-btn" data-tab="schools"><i class="fa-solid fa-graduation-cap"></i> Schools & Colleges</button>
+                        <button class="tab-btn" data-tab="tech"><i class="fa-solid fa-building"></i> Tech Parks & IT Hubs</button>
+                    </div>
+
+                    <!-- TAB CONTENT PANELS -->
+                    <div id="tab-hospitals" class="infra-content-grid tab-content"></div>
+                    <div id="tab-metro" class="infra-content-grid tab-content" style="display:none"></div>
+                    <div id="tab-bus" class="infra-content-grid tab-content" style="display:none"></div>
+                    <div id="tab-airport" class="infra-content-grid tab-content" style="display:none"></div>
+                    <div id="tab-schools" class="infra-content-grid tab-content" style="display:none"></div>
+                    <div id="tab-tech" class="infra-content-grid tab-content" style="display:none"></div>
+                </div>
+
+            </section>
+
+            <!-- VIEW 2: PROPERTIES CATALOG VIEW -->
+            <section id="view-catalog" class="view-panel">
+                <div class="glass-card">
+                    <div class="card-title">
+                        <div class="card-title-left"><i class="fa-solid fa-building-user"></i> Featured Bengaluru Property Catalog</div>
+                    </div>
+                    <div class="infra-content-grid">
+                        <div class="infra-card">
+                            <div class="title">Prestige Shantiniketan Luxury Apartment</div>
+                            <div class="tag">Whitefield, East Bengaluru</div>
+                            <div class="detail"><i class="fa-solid fa-bed"></i> 3 BHK &bull; 1,650 Sq.Ft</div>
+                            <div class="detail" style="color:#10b981; font-weight:700"><i class="fa-solid fa-tag"></i> ₹ 1.25 Cr ($ 150,600 USD)</div>
+                        </div>
+                        <div class="infra-card">
+                            <div class="title">Sobha Valley View Residency</div>
+                            <div class="tag">Kengeri, South-West Bengaluru</div>
+                            <div class="detail"><i class="fa-solid fa-bed"></i> 2 BHK &bull; 1,200 Sq.Ft</div>
+                            <div class="detail" style="color:#10b981; font-weight:700"><i class="fa-solid fa-tag"></i> ₹ 68.50 Lakhs ($ 82,500 USD)</div>
+                        </div>
+                        <div class="infra-card">
+                            <div class="title">Embassy Pristine Gated Community</div>
+                            <div class="tag">Koramangala, South Bengaluru</div>
+                            <div class="detail"><i class="fa-solid fa-bed"></i> 4 BHK &bull; 2,800 Sq.Ft</div>
+                            <div class="detail" style="color:#10b981; font-weight:700"><i class="fa-solid fa-tag"></i> ₹ 3.40 Cr ($ 409,600 USD)</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 3: BENGALURU REGIONAL ZONES VIEW -->
+            <section id="view-zones" class="view-panel">
+                <div class="glass-card">
+                    <div class="card-title">
+                        <div class="card-title-left"><i class="fa-solid fa-map"></i> Bengaluru Regional Real Estate Zones</div>
+                    </div>
+                    <div class="infra-content-grid">
+                        <div class="infra-card">
+                            <div class="title"><i class="fa-solid fa-compass" style="color:#3b82f6"></i> East Zone (Whitefield, ITPL, Marathahalli)</div>
+                            <div class="detail">Avg Price: ₹ 6,800 / sqft</div>
+                            <div class="detail">Growth Rate: +8.4% YoY (Tech Corridor Expansion)</div>
+                        </div>
+                        <div class="infra-card">
+                            <div class="title"><i class="fa-solid fa-compass" style="color:#10b981"></i> South Zone (Koramangala, Indiranagar, HSR)</div>
+                            <div class="detail">Avg Price: ₹ 9,500 / sqft</div>
+                            <div class="detail">Growth Rate: +11.2% YoY (Startup Hub & Connectivity)</div>
+                        </div>
+                        <div class="infra-card">
+                            <div class="title"><i class="fa-solid fa-compass" style="color:#f59e0b"></i> West Zone (Kengeri, Rajaji Nagar, Nagarbhavi)</div>
+                            <div class="detail">Avg Price: ₹ 5,400 / sqft</div>
+                            <div class="detail">Growth Rate: +6.9% YoY (Purple Line Metro Advantage)</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 4: SAVED VALUATIONS VIEW -->
+            <section id="view-valuations" class="view-panel">
+                <div class="glass-card">
+                    <div class="card-title">
+                        <div class="card-title-left"><i class="fa-solid fa-bookmark"></i> Saved Property Valuations History</div>
+                    </div>
+                    <div id="savedValuationsContainer">
+                        <p style="color:var(--text-muted); font-size:14px;">Loading saved history...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 5: MARKET INSIGHTS VIEW -->
+            <section id="view-insights" class="view-panel">
+                <div class="glass-card">
+                    <div class="card-title">
+                        <div class="card-title-left"><i class="fa-solid fa-chart-line"></i> Bengaluru Price Benchmarks & Insights</div>
+                    </div>
+                    <div class="metrics-grid" style="margin-bottom:24px;">
+                        <div class="metric-card">
+                            <div class="val" style="color:#10b981">₹ 6,850</div>
+                            <div class="lbl">City Average Price / sqft</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="val" style="color:#38bdf8">$ 82.50 USD</div>
+                            <div class="lbl">USD Equivalent / sqft</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="val" style="color:#a855f7">8.5%</div>
+                            <div class="lbl">Avg Home Loan Interest Rate</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 6: LOCATIONS & INFRASTRUCTURE VIEW -->
+            <section id="view-locations" class="view-panel">
+                <div class="glass-card">
+                    <div class="card-title">
+                        <div class="card-title-left"><i class="fa-solid fa-map-location-dot"></i> Bengaluru Infrastructure Network</div>
+                    </div>
+                    <p style="color:var(--text-muted); font-size:14px; margin-bottom:20px;">
+                        Explore complete details for nearby hospitals, Namma Metro stations (with line & entrance gate info), BMTC bus stops (with route codes), airport travel times, schools, and tech corridors.
+                    </p>
+                    <div class="tab-navigation">
+                        <button class="tab-btn active" onclick="document.querySelector('[data-tab=hospitals]').click()"><i class="fa-solid fa-hospital-user"></i> Nearer Hospitals</button>
+                        <button class="tab-btn" onclick="document.querySelector('[data-tab=metro]').click()"><i class="fa-solid fa-train-subway"></i> Nearer Metro Stations</button>
+                        <button class="tab-btn" onclick="document.querySelector('[data-tab=bus]').click()"><i class="fa-solid fa-bus"></i> Nearer Bus Stops</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 7: PROFILE & SETTINGS VIEW (FrontendJoe Sidebar 13 Profile style) -->
+            <section id="view-settings" class="view-panel">
+                <div class="profile-card-container">
+                    
+                    <!-- LEFT PROFILE CARD WITH AVATAR PHOTO UPLOADER -->
+                    <div class="profile-sidebar-card">
+                        <div class="avatar-upload-wrapper" id="avatarWrapper" title="Click to upload profile photo">
+                            <img src="{{ user.avatar if user.avatar else 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80' }}" alt="Profile Avatar" class="profile-main-avatar" />
+                            <div class="avatar-upload-overlay"><i class="fa-solid fa-camera"></i></div>
+                        </div>
+                        <input type="file" id="avatarFileInput" accept="image/*" style="display:none">
+
+                        <h3 id="profileHeaderName">{{ user.name }}</h3>
+                        <p id="profileHeaderEmail">{{ user.email }}</p>
+
+                        <!-- Functional Sub-menu -->
+                        <ul class="profile-menu">
+                            <li class="profile-menu-item active" data-subtab="profile">
+                                <a href="javascript:void(0)"><i class="fa-regular fa-user"></i> Profile Settings</a>
+                            </li>
+                            <li class="profile-menu-item" data-subtab="features">
+                                <a href="javascript:void(0)"><i class="fa-solid fa-cube"></i> Features & Preferences</a>
+                            </li>
+                            <li class="profile-menu-item" data-subtab="valuations">
+                                <a href="javascript:void(0)"><i class="fa-solid fa-bookmark"></i> Saved Valuations</a>
+                            </li>
+                            <li class="profile-menu-item" data-subtab="support">
+                                <a href="javascript:void(0)"><i class="fa-solid fa-headset"></i> Support & Help</a>
+                            </li>
+                            <li class="profile-menu-item">
+                                <a href="/api/auth/logout"><i class="fa-solid fa-right-from-bracket"></i> Exit / Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- RIGHT SUB-PANELS -->
+                    <div class="glass-card">
+                        
+                        <!-- SUBPANEL 1: PROFILE SETTINGS -->
+                        <div id="subpanel-profile" class="profile-sub-panel">
+                            <div class="card-title">
+                                <div class="card-title-left"><i class="fa-solid fa-sliders"></i> Account & Profile Information</div>
+                            </div>
+                            <form id="profileForm">
+                                <div class="form-group">
+                                    <label for="profName">Full Name</label>
+                                    <input type="text" id="profName" class="form-control" value="{{ user.name }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profEmail">Email Address</label>
+                                    <input type="email" id="profEmail" class="form-control" value="{{ user.email }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profRole">Role / Occupation</label>
+                                    <input type="text" id="profRole" class="form-control" value="{{ user.role if user.role else 'UI/UX Designer & Real Estate Investor' }}" required>
+                                </div>
+                                <button type="submit" class="btn-predict" style="width: auto; padding: 10px 24px;">
+                                    <i class="fa-solid fa-floppy-disk"></i> Save Profile Changes
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- SUBPANEL 2: FEATURES & PREFERENCES -->
+                        <div id="subpanel-features" class="profile-sub-panel" style="display:none">
+                            <div class="card-title">
+                                <div class="card-title-left"><i class="fa-solid fa-sliders"></i> Features & Preferences</div>
+                            </div>
+                            <form onsubmit="event.preventDefault(); alert('Preferences saved!');">
+                                <div class="form-group">
+                                    <label>Default Currency</label>
+                                    <select class="form-control">
+                                        <option value="INR" selected>Indian Rupees (₹ Lakhs / Cr) & US Dollars ($ USD)</option>
+                                        <option value="USD">US Dollars ($ USD) Primary</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Default Preferred Location</label>
+                                    <select class="form-control">
+                                        <option value="Whitefield" selected>Whitefield</option>
+                                        <option value="Kengeri">Kengeri</option>
+                                        <option value="Koramangala">Koramangala</option>
+                                        <option value="Indira Nagar">Indira Nagar</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Home Loan Interest Rate Benchmark (% p.a.)</label>
+                                    <input type="number" class="form-control" value="8.5" step="0.1" min="5" max="15">
+                                </div>
+                                <button type="submit" class="btn-predict" style="width: auto; padding: 10px 24px;">
+                                    <i class="fa-solid fa-check"></i> Save Preferences
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- SUBPANEL 3: SAVED VALUATIONS -->
+                        <div id="subpanel-valuations" class="profile-sub-panel" style="display:none">
+                            <div class="card-title">
+                                <div class="card-title-left"><i class="fa-solid fa-bookmark"></i> Bookmarked Property Valuations</div>
+                            </div>
+                            <p style="color:var(--text-muted); font-size:13px; margin-bottom:16px;">
+                                Here is the list of house valuations you have saved while browsing:
+                            </p>
+                            <div id="savedValuationsContainerSettings">
+                                <p style="color:var(--text-muted); font-size:14px;">Use the <strong>Saved Valuations</strong> tab in the sidebar or click below to refresh.</p>
+                            </div>
+                        </div>
+
+                        <!-- SUBPANEL 4: SUPPORT & HELP -->
+                        <div id="subpanel-support" class="profile-sub-panel" style="display:none">
+                            <div class="card-title">
+                                <div class="card-title-left"><i class="fa-solid fa-headset"></i> Support & Help Center</div>
+                            </div>
+                            
+                            <h4 style="font-size:15px; margin-bottom:12px; color:var(--text-main);">Frequently Asked Questions</h4>
+                            
+                            <div class="faq-item">
+                                <div class="faq-question">How does the ML House Price Prediction work? <i class="fa-solid fa-chevron-down"></i></div>
+                                <div class="faq-answer">Our system uses a trained Scikit-learn Linear Regression model fitted on 13,000+ Bengaluru house price listings. It factors in area, BHK count, bathrooms, balconies, property type, and 240+ location vectors.</div>
+                            </div>
+                            
+                            <div class="faq-item">
+                                <div class="faq-question">How is the USD ($) exchange rate calculated? <i class="fa-solid fa-chevron-down"></i></div>
+                                <div class="faq-answer">Values are converted using an average exchange rate of 1 USD = 83.0 INR, providing instant international investor valuations.</div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question">Where does the nearby public places data come from? <i class="fa-solid fa-chevron-down"></i></div>
+                                <div class="faq-answer">Data for hospitals, Namma Metro stations, BMTC bus stops, and airport travel times are mapped to each specific Bengaluru neighborhood.</div>
+                            </div>
+
+                            <h4 style="font-size:15px; margin:20px 0 12px; color:var(--text-main);">Contact Real Estate Support</h4>
+                            <form onsubmit="event.preventDefault(); alert('Support ticket submitted! Our team will contact you shortly.');">
+                                <div class="form-group">
+                                    <label>Subject</label>
+                                    <input type="text" class="form-control" placeholder="e.g. Question about Whitefield price trend" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Message</label>
+                                    <textarea class="form-control" rows="3" placeholder="Describe your query..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn-predict" style="width: auto; padding: 10px 24px;">
+                                    <i class="fa-solid fa-paper-plane"></i> Submit Ticket
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- META AI / WHATSAPP REAL ESTATE FLOATING CHATBOT WIDGET -->
+    <button id="metaChatTrigger" class="meta-chat-trigger" title="Ask Meta AI Real Estate Assistant">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <span class="badge-dot"></span>
+    </button>
+
+    <div id="chatWindow" class="chat-window">
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <div class="chat-ai-avatar"><i class="fa-solid fa-robot"></i></div>
+                <div class="chat-title">
+                    <h4>Meta AI Real Estate Assistant</h4>
+                    <p><i class="fa-solid fa-circle" style="font-size:8px"></i> Online &bull; WhatsApp Style</p>
+                </div>
+            </div>
+            <button id="btnCloseChat" class="btn-close-chat"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div id="chatMessages" class="chat-messages">
+            <div class="msg-bubble ai">
+                👋 Hi {{ user.name }}! I'm <strong>Meta AI</strong>, your Bengaluru Real Estate Assistant.
+
+Ask me about house prices, hospital distances, metro lines, or investment ROI in any area!
+            </div>
+        </div>
+
+        <div class="chat-prompts">
+            <button class="chip-prompt" data-prompt="What is the house price in Whitefield?">Price in Whitefield</button>
+            <button class="chip-prompt" data-prompt="Hospitals near Kengeri">Hospitals in Kengeri</button>
+            <button class="chip-prompt" data-prompt="Metro stations near Koramangala">Metro in Koramangala</button>
+            <button class="chip-prompt" data-prompt="Which area is best for investment?">Investment Tips</button>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Ask Meta AI a question...">
+            <button id="btnSendChat" class="btn-send-chat"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

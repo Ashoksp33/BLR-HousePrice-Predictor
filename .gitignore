@@ -17,3 +17,6 @@ ENV/
 # OS generated
 .DS_Store
 Thumbs.db
+
+# Temporary folders
+temp_bengaluru_repo/

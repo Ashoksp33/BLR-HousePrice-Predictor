@@ -1,91 +1,71 @@
-# 📈 Stock Market Price Prediction System
+# 🏠 BLR-HousePrice-Predictor
+### Bengaluru House Price Prediction & Real Estate Intelligence System
 
-An end-to-end Machine Learning & Web Application for predicting future stock market prices using **Long Short-Term Memory (LSTM)** deep learning neural networks, **Yahoo Finance API**, and **Flask**.
+An end-to-end Machine Learning web application for predicting Bengaluru house prices, exploring public infrastructure (hospitals, Namma Metro, BMTC bus stops, BLR airport), dual currency valuation (₹ INR & $ USD), and an interactive **Meta AI Real Estate Assistant**.
 
 ---
 
 ## 🌟 Key Features
 
-- **Real-Time Data Integration**: Downloads historical stock data dynamically from Yahoo Finance (`yfinance`).
-- **LSTM Deep Learning Architecture**: Trained on historical close prices (60-day sequence length) with Early Stopping & Dropout regularization.
-- **Multi-Day Forecasting**: Predicts future stock prices for 1 to 30 business days ahead.
-- **Model Evaluation Metrics**: Reports **RMSE**, **MAE**, **MAPE**, **R-squared ($R^2$)**, and **Directional Accuracy (%)**.
-- **Interactive Visualizations**: Generates dynamic plots comparing historical values, test model predictions, and future price trends.
-- **Modern Web UI**: Responsive Bootstrap 5 interface with real-time ticker info lookup.
+- **Trained ML Model**: Linear Regression model trained on 13,000+ Bengaluru house price listings supporting 240+ locations (Whitefield, Kengeri, Indiranagar, Koramangala, Electronic City, Yelahanka, HSR Layout, etc.).
+- **Dual Currency Valuation**: Displays prices simultaneously in **Indian Rupees (₹ Lakhs / ₹ Cr)** and **US Dollars ($ USD)** (1 USD = 83 INR).
+- **Financial Analytics**: Computes Price per Sq.Ft in ₹ and $, 20-Year Home Loan EMI, and valuation price range.
+- **Collapsible Pop & Expand Left Sidebar**: Sidebar menu (`FrontendJoe Sidebar 14`) with dark/light mode toggle switch and cursor hover pop-up animations.
+- **Settings & Profile Sub-Modules**: Profile photo uploader (camera overlay trigger), Features & Preferences, Saved Valuations History, and Support FAQ center.
+- **Public Places & Infrastructure Explorer**: Comprehensive metadata for Hospitals (distances, contacts, addresses), Namma Metro (lines, gates, operational status), BMTC Bus Stops (stop names, route numbers), and Kempegowda Int'l Airport (BLR) travel times.
+- **Meta AI Real Estate Assistant**: Floating WhatsApp-style chatbot widget answering instant questions about location prices, hospitals, metro lines, and investment ROI.
 
 ---
 
 ## 📁 Repository Structure
 
 ```
-portfolio/
-├── app.py                 # Flask web server & route handlers
-├── data_handler.py        # Yahoo Finance data fetcher & info parser
-├── model.py               # TensorFlow/Keras LSTM model building & sequence prediction
-├── utils.py               # Evaluation metrics (RMSE, MAE, MAPE, R2, Directional Accuracy)
-├── requirements.txt       # Python package dependencies
-├── README.md              # Project documentation
-├── .gitignore             # Git ignore configuration
-├── .vscode/
-│   └── launch.json        # VS Code launch & debug setup
+BLR-HousePrice-Predictor/
+├── app.py                 # Flask web server, REST API & chatbot route handlers
+├── auth.py                # SQLite authentication, user profiles, and saved valuations DB
+├── model_handler.py       # Scikit-learn ML model loader & dual currency math engine
+├── bengaluru_data.py      # Infrastructure database (Hospitals, Metro, Bus, Airport, Schools, Tech Parks)
+├── model.pkl              # Trained scikit-learn Linear Regression model
+├── columns.pkl            # ML feature column definitions
+├── columns.json           # Data columns JSON metadata
+├── test_system.py         # Automated test suite (5 tests passing)
 ├── static/
 │   ├── css/
-│   │   └── style.css      # Custom UI styles
+│   │   ├── auth.css       # Grey & White sliding login page styles
+│   │   └── dashboard.css  # Sidebar layout, dark/light theme CSS custom variables
 │   └── js/
-│       └── script.js      # Frontend interactivity & API fetch
+│       ├── auth.js        # Auth sliding card logic
+│       └── dashboard.js   # Sidebar views, avatar upload, saved valuations & Meta AI chatbot
 └── templates/
-    ├── index.html         # Homepage form interface
-    ├── result.html        # Prediction results & plots display
-    └── error.html         # User-friendly error page
+    ├── auth.html          # Grey & White 2-panel sliding login card
+    └── dashboard.html     # Main dashboard with sidebar, sub-panels & Meta AI widget
 ```
 
 ---
 
-## 🚀 Quick Start Guide in VS Code
+## 🚀 Quick Start Guide
 
-### 1. Requirements & Prerequisites
-Make sure Python 3.9+ is installed on your system.
-
-### 2. Install Dependencies
-Open a terminal in VS Code (`Ctrl + ~`) and run:
+### 1. Requirements & Dependencies
+Make sure Python 3.9+ is installed. Install requirements:
 ```bash
-pip install -r requirements.txt
+pip install flask numpy pandas scikit-learn
 ```
 
-### 3. Run the Application
-You can run the application in any of the following ways:
-
-#### Option A: Direct Python Command
+### 2. Run the Server
+Launch `app.py`:
 ```bash
 python app.py
 ```
-
-#### Option B: VS Code Run/Debug (F5)
-Press **F5** in VS Code or click the **Play Button** in the top right corner while `app.py` is open.
+Open **[http://127.0.0.1:5000](http://127.0.0.1:5000)** in your browser.
 
 ---
 
-## 🌐 Usage
+## 🔐 Demo Credentials
 
-1. Launching `app.py` automatically opens your default browser at `http://127.0.0.1:5000`.
-2. Enter a stock symbol (e.g., `AAPL`, `MSFT`, `NVDA`, `TSLA`, `GOOGL`).
-3. Click **Get Info** to view company sector, market cap, and 52-week range.
-4. Select historical Start/End dates (recommended range $\ge$ 1 year) and the number of days to predict (e.g. 7 days).
-5. Click **Predict Stock Prices**. The LSTM neural network will train on the data and render full metrics, price forecast tables, and trend plots.
+- **Email**: `demo@bengaluru.com`
+- **Password**: `password123`
 
 ---
 
-## 📊 Performance Metrics
-
-| Metric | Definition |
-| :--- | :--- |
-| **RMSE** | Root Mean Square Error — measures model standard deviation of error. |
-| **MAE** | Mean Absolute Error — average dollar magnitude of prediction error. |
-| **MAPE** | Mean Absolute Percentage Error — percentage discrepancy relative to actual prices. |
-| **$R^2$ Score** | Coefficient of Determination — proportion of variance explained by model (up to 1.0). |
-| **Directional Accuracy** | Percentage of days the model correctly predicted upward vs. downward price movements. |
-
----
-
-## ⚠️ Disclaimer
-*This tool is created for educational and research purposes only. Stock market price predictions are inherently uncertain and should not be used as financial advice.*
+## 📜 License
+This project is licensed under the MIT License.
